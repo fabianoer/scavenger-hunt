@@ -4,6 +4,9 @@ FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS bu
 # Set working directory
 WORKDIR /app
 
+# Download and install NuGet
+RUN ["cmd", "/c", "powershell -Command \"Invoke-WebRequest -Uri 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe' -OutFile 'nuget.exe'\""]
+
 # Copy the solution file first
 COPY ScavengerHunt.sln .
 
@@ -11,8 +14,8 @@ COPY ScavengerHunt.sln .
 COPY ScavengerHunt.Web/ScavengerHunt.Web.csproj ScavengerHunt.Web/
 COPY ScavengerHunt.Web/packages.config ScavengerHunt.Web/
 
-# Restore NuGet packages using cmd instead of PowerShell
-RUN ["cmd", "/c", "nuget restore ScavengerHunt.sln"]
+# Restore NuGet packages using the downloaded nuget.exe
+RUN ["cmd", "/c", "nuget.exe restore ScavengerHunt.sln"]
 
 # Copy the rest of the source code
 COPY . .
