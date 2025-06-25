@@ -29,24 +29,27 @@ function Build-DockerImage {
     return $LASTEXITCODE
 }
 
-# Try building with the main Dockerfile first
-$buildResult = Build-DockerImage "Dockerfile"
+# Try building with different Dockerfile variants
+$dockerfiles = @("Dockerfile", "Dockerfile.simple", "Dockerfile.windows", "Dockerfile.nuget", "Dockerfile.alternative")
 
-if ($buildResult -ne 0) {
-    Write-Host "⚠️  Main Dockerfile failed, trying alternative..." -ForegroundColor Yellow
-    $buildResult = Build-DockerImage "Dockerfile.alternative"
+foreach ($dockerfile in $dockerfiles) {
+    Write-Host "🔄 Trying $dockerfile..." -ForegroundColor Cyan
+    $buildResult = Build-DockerImage $dockerfile
+    
+    if ($buildResult -eq 0) {
+        Write-Host "✅ Docker image built successfully with $dockerfile" -ForegroundColor Green
+        break
+    } else {
+        Write-Host "❌ $dockerfile failed, trying next..." -ForegroundColor Red
+    }
 }
 
 if ($buildResult -ne 0) {
-    Write-Host "⚠️  Alternative Dockerfile failed, trying NuGet version..." -ForegroundColor Yellow
-    $buildResult = Build-DockerImage "Dockerfile.nuget"
-}
-
-if ($buildResult -eq 0) {
-    Write-Host "✅ Docker image built successfully" -ForegroundColor Green
-} else {
     Write-Host "❌ All Docker build attempts failed" -ForegroundColor Red
-    Write-Host "💡 Try running manually: docker build -f Dockerfile.nuget -t scavengerhunt:latest ." -ForegroundColor Yellow
+    Write-Host "💡 Try running manually with one of these commands:" -ForegroundColor Yellow
+    Write-Host "   docker build -f Dockerfile.simple -t scavengerhunt:latest ." -ForegroundColor Gray
+    Write-Host "   docker build -f Dockerfile.windows -t scavengerhunt:latest ." -ForegroundColor Gray
+    Write-Host "   docker build -f Dockerfile.nuget -t scavengerhunt:latest ." -ForegroundColor Gray
     exit 1
 }
 
