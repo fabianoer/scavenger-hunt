@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.pdb
+*.log
+
+# Build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Temporary files
+*.tmp
+*.temp
+Thumbs.db
+
+# Documentation
+*.md
+LICENSE.txt
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# IDE
+.vscode/
+*.sln.docstates
+
+# OS
+.DS_Store 

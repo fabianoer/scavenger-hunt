@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  scavengerhunt-web:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - scavengerhunt-db
+    restart: unless-stopped
+
+  scavengerhunt-db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - scavengerhunt_data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  scavengerhunt_data: 

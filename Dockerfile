@@ -1,0 +1,34 @@
+# Use the official .NET Framework SDK image for building
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy the solution and project files
+COPY ScavengerHunt.sln .
+COPY ScavengerHunt.Web/ScavengerHunt.Web.csproj ScavengerHunt.Web/
+COPY packages/ packages/
+
+# Restore NuGet packages
+RUN nuget restore ScavengerHunt.sln
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the application in Release mode with Production configuration
+RUN msbuild ScavengerHunt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:PublishUrl="C:\publish" /p:TransformWebConfigEnabled=true /p:AutoParameterizationWebConfigConnectionStrings=false
+
+# Use the runtime image for the final stage
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019
+
+# Set working directory
+WORKDIR /inetpub/wwwroot
+
+# Copy the published application from the build stage
+COPY --from=build /publish .
+
+# Expose port 80
+EXPOSE 80
+
+# Set the entry point
+ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc"] 

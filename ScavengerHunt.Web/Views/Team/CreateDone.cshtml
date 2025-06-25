@@ -1,0 +1,16 @@
+﻿@model ScavengerHunt.Web.Models.Team
+
+@{
+    ViewBag.Title = "Thanks!";
+}
+
+<h2>Welcome, @Html.DisplayFor(model => model.Name)!</h2>
+
+<div class="alert alert-success">
+    Your team was created successfully
+</div>
+
+Your team's access code is: <code><b>@Html.DisplayFor(model => model.Token)</b></code>. Share this code with your teammates. They'll need it to join your team!
+
+<hr/>
+<a class="btn btn-success" href="/TeamStunt">Start your adventure! &raquo;</a>

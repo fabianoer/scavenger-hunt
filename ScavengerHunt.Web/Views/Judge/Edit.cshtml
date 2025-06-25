@@ -1,0 +1,129 @@
+﻿@model ScavengerHunt.Web.Models.TeamStunt
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Stunt</h4>
+        <hr/>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Stunt.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Stunt.Title)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Stunt.Description)
+            </dt>
+
+            <dd>
+                @Html.Markdown(Model.Stunt.Description)
+            </dd>
+            
+            <dt>
+                @Html.DisplayNameFor(model => model.Stunt.JudgeNotes)
+            </dt>
+
+            <dd>
+                @Html.Markdown(Model.Stunt.JudgeNotes)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Stunt.MaxScore)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Stunt.MaxScore)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Stunt.Type)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Stunt.Type)
+            </dd>
+
+        </dl>
+        
+
+        <h4>TeamStunt</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.DateUpdated, new { @class = "control-label col-md-2" })
+            @Html.DisplayFor(model => model.DateUpdated)
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.Submission, new { @class = "control-label col-md-2" })
+            @Html.DisplayFor(model => model.Submission)
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.TeamNotes, new { @class = "control-label col-md-2" })
+            @Html.DisplayFor(model => model.TeamNotes)
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.Score, new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Score)
+            @Html.ValidationMessageFor(model => model.Score)
+            <input type="button" class="btn-secondary" value="Max" onclick="setMaxScore()" />
+        </div>
+        
+        <div class="mb-3">
+            @Html.LabelFor(model => model.JudgeNotes, new { @class = "control-label col-md-2" })
+            @Html.TextAreaFor(model => model.JudgeNotes, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.JudgeNotes)
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.JudgeFeedback, new { @class = "control-label col-md-2" })
+            @Html.TextAreaFor(model => model.JudgeFeedback, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.JudgeFeedback)
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Status)
+            @Html.ValidationMessageFor(model => model.Status)
+        </div>
+
+        <div class="mb-3">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+    var setMaxScore = function() {
+        $("#Score").val(@Model.Stunt.MaxScore);
+    };
+</script>
+
+}

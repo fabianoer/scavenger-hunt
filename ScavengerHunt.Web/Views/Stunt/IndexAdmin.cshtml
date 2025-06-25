@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ScavengerHunt.Web.Models.Stunt>
+
+@{
+    ViewBag.Title = "Manage Stunts";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create") | @Html.ActionLink("Flag Submissions", "Flags", "Judge") | @Html.ActionLink("Data Management", "Data") | Published stunts : @string.Format("{0} / {1}", Model.Count(x => x.Published), Model.Count())
+</p>
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Keyword)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Published)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxScore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JudgeNotes)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <kbd>@Html.DisplayFor(modelItem => item.Keyword)</kbd>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)<br />
+                <span class="text-muted" style="font-size: small">
+                    @Html.Markdown(item.Description)
+                </span>
+            </td>
+            <td>
+                @Html.CheckBoxFor(modelItem => item.Published, new { @disabled = "disabled" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxScore)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JudgeNotes, "Tooltip", new { Icon = "glyphicon-file" })
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts
+{
+    <script type="text/javascript">
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+}

@@ -1,0 +1,17 @@
+﻿﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    if (ViewBag.Text != null)
+    {
+        <a href="#" data-bs-toggle=tooltip data-bs-title="@Model">@ViewBag.Text</a>
+    }
+    else if (ViewBag.Icon != null)
+    {
+        <a href="#" data-bs-toggle=tooltip data-bs-title="@Model"><span class="@ViewBag.Icon"></span></a>
+    }
+    else
+    {
+        <a href="#" data-bs-toggle=tooltip data-bs-title="@Model">Notes</a>
+    }
+}

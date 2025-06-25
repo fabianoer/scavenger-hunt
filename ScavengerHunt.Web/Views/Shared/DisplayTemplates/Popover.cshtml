@@ -1,0 +1,18 @@
+﻿﻿@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    if (string.IsNullOrEmpty(ViewBag.DataPlacement))
+    {
+        ViewBag.DataPlacement = "top";
+    }
+    
+    if (ViewBag.Text != null)
+    {
+        <a href="#" data-bs-toggle="popover" data-bs-title="@ViewBag.Description" data-bs-content="@Model" data-bs-placement="@ViewBag.DataPlacement">@ViewBag.Text</a>
+    }
+    if (ViewBag.Icon != null)
+    {
+        <a href="#" data-bs-toggle="popover" data-bs-title="@ViewBag.Description" data-bs-content="@Model" data-bs-placement="@ViewBag.DataPlacement"><span class="@ViewBag.Icon"></span></a>
+    }
+}

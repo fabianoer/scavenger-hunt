@@ -1,0 +1,53 @@
+﻿@using Microsoft.Ajax.Utilities
+@using ScavengerHunt.Web.Resources
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>@Resources.ScavengerHunt</h1>
+    <p class="lead">@Resources.HomeJumbotronLead</p>
+    <p>
+        <a href="https://github.com/scarpentier/ScavengerHunt" class="btn btn-primary btn-lg">@Resources.SourceCode &raquo;</a>
+        <a href="@ViewBag.settings.GuideUrl" class="btn btn-primary btn-lg">Guide &raquo;</a>
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>@Resources.JoinExistingTeam</h2>
+        <p>@Resources.JoinExistingTeamExplanation</p>
+        <p><a class="btn btn-primary" href="/Team/Start">@Resources.Join &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>@Resources.RegisterNewTeam</h2>
+        <p>
+            @Resources.RegisterNewTeamExplanation
+        </p>
+        <p><a class="btn btn-primary" href="/Team/Start">@Resources.Create &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>@Resources.StartJourney</h2>
+        <p>@Resources.StartJourneyExplanation</p>
+        <p><a class="btn btn-primary" href="/TeamStunt/">@Resources.Start &raquo;</a></p>
+    </div>
+</div>
+
+@if (ViewBag.settings.GuestTeamsVisible || User.Identity.IsAuthenticated)
+{
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h2>@Resources.CurrentRankings</h2>
+            @Html.Action("IndexPartial", "Team")
+        </div>
+        @if (ViewBag.settings.GuestStuntsVisible || User.Identity.IsAuthenticated)
+        {
+            <div class="col-md-4">
+                <h2>@Resources.StuntActivity</h2>
+                @Html.Action("ActivityPartial", "TeamStunt")
+            </div>
+        }
+    </div>
+}

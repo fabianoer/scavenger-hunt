@@ -1,0 +1,103 @@
+﻿@using ScavengerHunt.Web.Models
+@model IEnumerable<ScavengerHunt.Web.Models.TeamStunt>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Judgement Queue</h2>
+
+<p>@Html.ActionLink("Flag Submissions", "Flags")</p>
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            Team Name
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Stunt.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Score)
+        </th>
+        <th>
+            @Resources.Notes
+        </th>
+    </tr>
+
+@foreach (var item in Model.Where(x=>x.Status == TeamStuntStatusEnum.Pending).OrderBy(x=>x.DateUpdated)) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Team.Name)
+        </td>
+        <td>
+            <kbd>@Html.DisplayFor(modelItem => item.Stunt.Keyword)</kbd>
+            @Html.DisplayFor(modelItem => item, "TeamStuntTitle", new { ForceCollapse = true })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item, "Score")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TeamNotes, "Tooltip", new { Text = "Team" })
+            @Html.DisplayFor(modelItem => item.JudgeFeedback, "Tooltip", new { Text = "Feedback" })
+            @Html.DisplayFor(modelItem => item.JudgeNotes, "Tooltip", new { Text = "Notes" })
+        </td>
+    </tr>
+}
+</table>
+
+@if (Model.Any(x => x.Done))
+{
+    <h2>Already Judged</h2>
+
+    <table class="table table-hover">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Team.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stunt.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+            <th>
+                @Resources.Notes
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.Where(x => x.Done).OrderByDescending(x => x.DateUpdated))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Team.Name)
+                </td>
+                <td>
+                    <kbd>@Html.DisplayFor(modelItem => item.Stunt.Keyword)</kbd>
+                    @Html.DisplayFor(modelItem => item, "TeamStuntTitle", new { ForceCollapse = true })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item, "Score")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamNotes, "Tooltip", new { Text = "Team" })
+                    @Html.DisplayFor(modelItem => item.JudgeFeedback, "Tooltip", new { Text = "Feedback" })
+                    @Html.DisplayFor(modelItem => item.JudgeNotes, "Tooltip", new { Text = "Notes" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+}

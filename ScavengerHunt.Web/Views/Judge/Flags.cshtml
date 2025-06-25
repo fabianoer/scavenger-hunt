@@ -1,0 +1,80 @@
+﻿@using ScavengerHunt.Web.Models
+@model IEnumerable<ScavengerHunt.Web.Models.TeamStunt>
+
+@{
+    ViewBag.Title = "Flag Sumbissions";
+}
+
+<h2>Flag Submissions</h2>
+
+<table class="table table-hover">
+    <tr>
+        <th></th>
+        <th>
+            Team Name
+        </th>
+        <th style="width: 50%;">
+            @Html.DisplayNameFor(model => model.Stunt.Title)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Submission)
+        </th>
+        <th>
+            Expecting
+        </th>
+        <th>
+            
+        </th>
+        <th>
+            Tries
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.OrderByDescending(x => x.DateUpdated))
+{
+    <tr>
+        <th>
+            <span class="icon-angle-down"></span>
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => item.Team.Name)
+        </td>
+        <td>
+            <kbd>@Html.DisplayFor(modelItem => item.Stunt.Keyword)</kbd>
+            @Html.DisplayFor(modelItem => item.Stunt, "StuntTitle", new { ForceCollapse = true })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Submission, "Popover", new { Icon = "icon-flag", DataPlacement = "top" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Stunt.JudgeNotes, "Popover", new { Icon = "icon-flag", DataPlacement = "bottom" })
+        </td>
+        <td>
+            @if (item.Score == item.Stunt.MaxScore)
+            {
+                <span class="icon-ok" style="color: darkgreen;"></span>
+            }
+            else
+            {
+                <span class="icon-cancel" style="color: darkred;"></span>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JudgeNotes)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+        </td>
+    </tr>
+}
+</table>
+
+@section scripts
+{
+    <script type="text/javascript">
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    </script>
+}
