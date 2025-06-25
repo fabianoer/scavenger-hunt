@@ -1,0 +1,26 @@
+# Universal Dockerfile that works in any container environment
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy everything at once
+COPY . .
+
+# Use the default shell and build directly
+RUN msbuild ScavengerHunt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:PublishUrl="C:\publish"
+
+# Use the runtime image
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8
+
+# Set working directory
+WORKDIR /inetpub/wwwroot
+
+# Copy the published application
+COPY --from=build /publish .
+
+# Expose port 80
+EXPOSE 80
+
+# Set the entry point
+ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc"] 

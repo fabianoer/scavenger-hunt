@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  scavengerhunt-web:
+    # Uncomment one of these command overrides as needed:
+    
+    # Standard production command (default)
+    # command: C:\ServiceMonitor.exe w3svc
+    
+    # Debug mode - PowerShell for troubleshooting
+    # command: powershell
+    
+    # Custom startup with logging
+    # command: powershell -Command "Write-Host 'Starting ScavengerHunt...'; C:\ServiceMonitor.exe w3svc"
+    
+    # Development mode
+    # command: powershell -Command "$env:ASPNETCORE_ENVIRONMENT='Development'; C:\ServiceMonitor.exe w3svc"
+    
+    # Health check mode
+    # command: powershell -Command "while($true) { Write-Host 'Health check...'; Test-NetConnection -ComputerName localhost -Port 80; Start-Sleep 30 }"
+    
+    environment:
+      # Uncomment for development
+      # - ASPNETCORE_ENVIRONMENT=Development
+      
+      # Uncomment for custom database connection
+      # - ConnectionStrings__ScavengerHuntContext=Server=scavengerhunt-db;Database=ScavengerHunt;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true;
+    
+    # Uncomment for interactive mode
+    # stdin_open: true
+    # tty: true
+    
+    # Uncomment for custom port mapping
+    # ports:
+    #   - "8081:80" 

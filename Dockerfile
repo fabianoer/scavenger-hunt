@@ -11,8 +11,7 @@ COPY ScavengerHunt.sln .
 COPY ScavengerHunt.Web/ScavengerHunt.Web.csproj ScavengerHunt.Web/
 COPY ScavengerHunt.Web/packages.config ScavengerHunt.Web/
 
-# Restore NuGet packages using the default shell
-SHELL ["cmd", "/S", "/C"]
+# Restore NuGet packages
 RUN nuget restore ScavengerHunt.sln
 
 # Copy the rest of the source code
