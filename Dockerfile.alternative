@@ -4,18 +4,11 @@ FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019 AS bu
 # Set working directory
 WORKDIR /app
 
-# Copy the solution file first
-COPY ScavengerHunt.sln .
-
-# Copy the project file and packages.config
-COPY ScavengerHunt.Web/ScavengerHunt.Web.csproj ScavengerHunt.Web/
-COPY ScavengerHunt.Web/packages.config ScavengerHunt.Web/
-
-# Restore NuGet packages (this will download packages if not present)
-RUN nuget restore ScavengerHunt.sln
-
-# Copy the rest of the source code
+# Copy everything first
 COPY . .
+
+# Restore NuGet packages
+RUN nuget restore ScavengerHunt.sln
 
 # Build the application in Release mode with Production configuration
 RUN msbuild ScavengerHunt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:PublishUrl="C:\publish" /p:TransformWebConfigEnabled=true /p:AutoParameterizationWebConfigConnectionStrings=false

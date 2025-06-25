@@ -31,10 +31,14 @@ LICENSE.txt
 Dockerfile
 .dockerignore
 docker-compose.yml
+deploy-docker.ps1
 
 # IDE
 .vscode/
 *.sln.docstates
 
 # OS
-.DS_Store 
+.DS_Store
+
+# Keep packages directory for NuGet restore
+# packages/ is NOT excluded 
