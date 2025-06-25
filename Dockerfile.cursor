@@ -1,0 +1,39 @@
+# Multi-platform build for Cursor deployment
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/framework/sdk:4.8 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy the solution file first
+COPY ScavengerHunt.sln .
+
+# Copy the project file and packages.config
+COPY ScavengerHunt.Web/ScavengerHunt.Web.csproj ScavengerHunt.Web/
+COPY ScavengerHunt.Web/packages.config ScavengerHunt.Web/
+
+# Copy everything at once to avoid shell issues
+COPY . .
+
+# Use PowerShell for Windows containers, fallback to cmd
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+# Restore NuGet packages
+RUN nuget restore ScavengerHunt.sln
+
+# Build the application in Release mode
+RUN msbuild ScavengerHunt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:PublishUrl="C:\publish"
+
+# Use the runtime image for the final stage
+FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/framework/aspnet:4.8
+
+# Set working directory
+WORKDIR /inetpub/wwwroot
+
+# Copy the published application from the build stage
+COPY --from=build /publish .
+
+# Expose port 80
+EXPOSE 80
+
+# Set the entry point
+ENTRYPOINT ["C:\\ServiceMonitor.exe", "w3svc"] 
